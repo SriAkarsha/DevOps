@@ -1,0 +1,14 @@
+// Import the http, os, path, and events modulesconst http = require('http');const os = require('os');const path = require('path');const EventEmitter = require('events');// Create a custom event emitterclass MyEmitter extends EventEmitter {}const myEmitter = new MyEmitter();// Define a simple request handlerconst requestHandler = (req, res) => {if (req.url === '/') {res.writeHead(200, { 'Content-Type': 'text/plain' });res.end('Hello, World!\n');} else if (req.url === '/info') {const info = {hostname: os.hostname(),platform: os.platform(),homedir: os.homedir(),file: __filename,dir: __dirname};res.writeHead(200, { 'Content-Type': 'application/json' });res.end(JSON.stringify(info, null, 2));} else {res.writeHead(404, { 'Content-Type': 'text/plain' });res.end('Not Found\n');}// Emit a custom eventmyEmitter.emit('requestHandled', req.url);// Emit the custom message eventmyEmitter.emit('customEvent', { message: 'Hello from custom event!' });};
+
+// Create the serverconst server = http.createServer(requestHandler);// Listen on port 3000server.listen(3000, () => {console.log('Server is running on http://localhost:3000');});// Listen for the requestHandled eventmyEmitter.on('requestHandled', (url) => {console.log(`A request was made to: ${url}`);});// Listen for the customEvent event and log the messagemyEmitter.on('customEvent', (data) => {console.log(`Custom Event Triggered: ${JSON.stringify(data)}`);});
+
+server.js
+
+npm init -y
+node server.js
+
+
+
+
+
+
